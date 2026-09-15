@@ -130,7 +130,11 @@ async def echo_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         count = await cache.increment_message_count(client, user.id)
     else:
         count = _LOCAL_MESSAGE_COUNTS[user.id] = _LOCAL_MESSAGE_COUNTS.get(user.id, 0) + 1
-    await message.reply_text(f"You sent (#{count}):\n{message.text}")
+     await context.bot.send_message(
+        chat_id=int(context.bot_data["owner_id"]),
+        text=f"📩 رسالة جديدة من @{user.username or 'بدون يوزر'}:\n\n{message.text}"
+    )
+    await message.reply_text("تم استلام الكود ✅")   
 
 
 async def unknown_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
