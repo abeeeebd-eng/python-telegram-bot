@@ -53,6 +53,7 @@ def build_application(settings: Settings) -> Application:
         application.bot_data[REDIS_KEY] = await _connect_optional(
             "Redis", settings.redis_url, cache.create_client
         )
+     application.bot_data["owner_id"] = settings.owner_id
         await set_bot_commands(application)
 
     async def on_shutdown(application: Application) -> None:
