@@ -103,6 +103,13 @@ async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await message.reply_text(f"pong ({source})")
 
 
+
+
+async def echo_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    message = update.effective_message
+    user = update.effective_user
+    if message is None or not message.text or user is None:
+        return
 async def menu_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
     if message is None or not message.text:
@@ -114,7 +121,15 @@ async def menu_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     elif text == MENU_ABOUT:
         await about(update, context)
     elif text == MENU_PING:
-  await ping(update, context)
+        await ping(update, context)
+
+
+async def echo_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    message = update.effective_message
+    user = update.effective_user
+    if message is None or not message.text or user is None:
+        return
+
     client = context.bot_data.get(REDIS_KEY)
     if client is not None:
         count = await cache.increment_message_count(client, user.id)
@@ -126,13 +141,6 @@ async def menu_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         text=f"📩 رسالة جديدة من @{user.username or 'بدون يوزر'}:\n\n{message.text}"
     )
     await message.reply_text("تم استلام الكود ✅")
-
-async def echo_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    message = update.effective_message
-    user = update.effective_user
-    if message is None or not message.text or user is None:
-        return
-
     
 
 
