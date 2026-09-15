@@ -14,6 +14,7 @@ class Settings:
     bot_token: str
     database_url: str
     redis_url: str
+    owner_id: int
     log_level: str = "INFO"
 
     @classmethod
@@ -29,11 +30,13 @@ class Settings:
         # local testing easy; on Railway the linked services fill these in.
         database_url = os.getenv("DATABASE_URL", "").strip()
         redis_url = os.getenv("REDIS_URL", "").strip()
+        owner_id = int(os.getenv("OWNER_ID", "0"))
 
         log_level = os.getenv("LOG_LEVEL", "INFO").strip().upper() or "INFO"
         return cls(
             bot_token=bot_token,
             database_url=database_url,
             redis_url=redis_url,
+            owner_id=owner_id,
             log_level=log_level,
         )
