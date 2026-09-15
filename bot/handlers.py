@@ -60,12 +60,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         is_new = await db.upsert_user(pool, user.id, user.username, user.first_name)
 
     name = user.first_name if user.first_name else "friend"
-    greeting = "Welcome" if is_new else "Welcome back"
     await message.reply_text(
-        f"{greeting}, {name}! The bot is running.\n\n"
-        "Choose a menu button below or type /help to see the available commands.",
-        reply_markup=MAIN_MENU_KEYBOARD,
-    )
+    "الاشتراك 100 ريال 💳 بعد الدفع أرسل كود لايك كارد هنا أو على الإنستا @lasreii، وبعد التحقق يصلك رابط القناة 🤍",
+    reply_markup=MAIN_MENU_KEYBOARD,
+)
 
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
