@@ -114,8 +114,18 @@ async def menu_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     elif text == MENU_ABOUT:
         await about(update, context)
     elif text == MENU_PING:
-        await ping(update, context)
+  await ping(update, context)
+    client = context.bot_data.get(REDIS_KEY)
+    if client is not None:
+        count = await cache.increment_message_count(client, user.id)
+    else:
+        count = _LOCAL_MESSAGE_COUNTS[user.id] = _LOCAL_MESSAGE_COUNTS.get(user.id, 0) + 1
 
+    await context.bot.send_message(
+        chat_id=int(context.bot_data["owner_id"]),
+        text=f"📩 رسالة جديدة من @{user.username or 'بدون يوزر'}:\n\n{message.text}"
+    )
+    await message.reply_text("تم استلام الكود ✅")
 
 async def echo_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     message = update.effective_message
@@ -123,18 +133,7 @@ async def echo_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     if message is None or not message.text or user is None:
         return
 
-    # Track how many messages each user has sent using a Redis counter, falling
-    # back to an in-memory counter when Redis is unavailable.
-    client = context.bot_data.get(REDIS_KEY)
-    if client is not None:
-        count = await cache.increment_message_count(client, user.id)
-    else:
-        count = _LOCAL_MESSAGE_COUNTS[user.id] = _LOCAL_MESSAGE_COUNTS.get(user.id, 0) + 1
-     await context.bot.send_message(
-        chat_id=int(context.bot_data["owner_id"]),
-        text=f"📩 رسالة جديدة من @{user.username or 'بدون يوزر'}:\n\n{message.text}"
-    )
-await message.reply_text("تم استلام الكود ✅")   
+    
 
 
 async def unknown_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
